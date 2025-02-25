@@ -28,7 +28,10 @@ namespace EtReader {
     //% block.loc.nl="stel de module id in op %id"
     //% id.defl="EtReader"
     export function setModuleId(id: string) {
+        EtCommon.events.unregister(MODULE)
         MODULE = id
+        EtCommon.events.register(id, "rfid", onEventRfid)
+        EtCommon.events.register(id, "ibutton", onEventIBut)
     }
 
     //% block="id of the rfid card of %id"
@@ -49,7 +52,6 @@ namespace EtReader {
     //% block.loc.nl="wanneer %id een rfid kaart heeft gelezen"
     //% id.defl="EtReader"
     export function onRfid(id: string, programmableCode: () => void): void {
-        EtCommon.events.register(id, "rfid", onEventRfid)
         EventRfid = programmableCode
     }
 
@@ -57,8 +59,10 @@ namespace EtReader {
     //% block.loc.nl="wanneer %id een ibutton heeft gelezen"
     //% id.defl="EtReader"
     export function onIBut(id: string, programmableCode: () => void): void {
-        EtCommon.events.register(id, "ibutton", onEventIBut)
         EventIBut = programmableCode
     }
+
+    EtCommon.events.register(MODULE, "rfid", onEventRfid)
+    EtCommon.events.register(MODULE, "ibutton", onEventIBut)
 
 }
